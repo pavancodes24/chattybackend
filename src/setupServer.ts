@@ -83,8 +83,8 @@ export class chattyServer{
                 methods:['GET','POST','PUT','DELETE','OPTIONS']
             }
         });
-        const pubClient = createClient({url:config.REDIS_HOST})
-        const subClient = pubClient.duplicate();
+        const pubClient = createClient({url:config.REDIS_HOST})  //public client
+        const subClient = pubClient.duplicate();                 //subscription client
         await Promise.all([pubClient.connect(),subClient.connect()]);
         io.adapter(createAdapter(pubClient,subClient))
         return io;
