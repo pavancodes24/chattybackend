@@ -11,6 +11,7 @@ import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
 import 'express-async-errors';
 import {config} from './config'; 
+import applicationRoutes from './routes';
 
 const SERVER_PORT = 5000;
 
@@ -61,7 +62,9 @@ export class chattyServer{
     }
 
 
-    private routesMiddleware(app:Application) : void {}
+    private routesMiddleware(app:Application) : void {
+        applicationRoutes(app);
+    }
 
     private globalErrorHandler(app:Application) : void {}
 
