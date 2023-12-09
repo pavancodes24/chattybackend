@@ -4,9 +4,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import compression from 'compression';
-import cookierSession from 'cookie-session';
+import cookieSession from 'cookie-session';
 import HTTP_STATUS from 'http-status-codes';
 import 'express-async-errors';
+import {config} from './config'; 
 
 const SERVER_PORT = 5000;
 
@@ -27,18 +28,18 @@ export class chattyServer{
 
     private securityMiddleware(app:Application) : void {
         app.use(
-            cookierSession({
+            cookieSession({
                 name:"session",  //any name you want ( when we setup load balancer we are needing it)
-                keys:['test1','test2'], // later into env variables
+                keys:[config.SECRET_KEY_ONE!,config.SECRET_KEY_TWO!], // later into env variables
                 maxAge : 24*7*60*60*1000,  // 7 days
-                secure : false,  // we want https in production  then we need to set it to true in production server
+                secure : config.NODE_ENV !== 'development',  // we want https in production  then we need to set it to true in production server
             })
         )
 
         app.use(hpp());
         app.use(helmet());
         app.use(cors({
-            origin: '*',  // later we are going to set it to client url
+            origin: config.CLIENT_URL,  // later we are going to set it to client url
             credentials: true, // cookies wont work if this is not true
             optionsSuccessStatus:200, //older browsers like internet expolorers
             methods:['GET','POST','PUT','DELETE','OPTIONS']
