@@ -1,6 +1,6 @@
 import HTTP_STATUS from 'http-status-codes';
 
-export interface IErrrorResponse {
+export interface IErrorResponse {
     message : string;
     statusCode : number;
     status: string;
@@ -88,8 +88,3 @@ export class ServerError extends CustomError {
             super(message)
     } 
 }
-
-
-
-
-

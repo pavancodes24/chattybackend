@@ -9,12 +9,15 @@ import HTTP_STATUS from 'http-status-codes';
 import { Server } from 'socket.io';
 import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
+import Logger from 'bunyan';
 import 'express-async-errors';
 import {config} from './config'; 
 import applicationRoutes from './routes';
-import { CustomError, IErrrorResponse } from './shared/globals/helpers/error-handler';
+import { CustomError, IErrorResponse } from './shared/globals/helpers/error-handler';
+
 
 const SERVER_PORT = 5000;
+const log : Logger = config.createLogger('server')
 
 export class chattyServer{
     private app:Application;
@@ -46,7 +49,7 @@ export class chattyServer{
         app.use(cors({
             origin: config.CLIENT_URL,  // later we are going to set it to client url
             credentials: true, // cookies wont work if this is not true
-            optionsSuccessStatus:200, //older browsers like internet expolorers
+            optionsSuccessStatus:200, //older browsers like internet explorers
             methods:['GET','POST','PUT','DELETE','OPTIONS']
         }))
 
@@ -73,8 +76,8 @@ export class chattyServer{
 
         });
 
-        app.use((error: IErrrorResponse,_req:Request,res:Response,next:NextFunction)=>{
-            console.log(error);
+        app.use((error: IErrorResponse,_req:Request,res:Response,next:NextFunction)=>{
+            log.error(error);
             if(error instanceof CustomError){
                 return res.status(error.statusCode).json(error.serializeErrors());
             }
@@ -89,7 +92,7 @@ export class chattyServer{
             this.startHttpServer(httpServer);
             this.socketIOConnections(socketIO);
         } catch (error) {
-            console.log(error);
+            log.error(error);
         }
     }
 
@@ -108,13 +111,12 @@ export class chattyServer{
     }
 
     private startHttpServer(httpServer: http.Server) : void {
-        console.log(`Server has started with process ${process.pid}`); //later for production we are gonna run multiple processes
+        log.info(`Server has started with process ${process.pid}`); //later for production we are gonna run multiple processes
         httpServer.listen(SERVER_PORT,()=>{
-            console.log(`Server running on port ${SERVER_PORT}`)
+            log.info(`Server running on port ${SERVER_PORT}`)
         })
     }
 
     private socketIOConnections(io:Server):void {}
     
-
 }  

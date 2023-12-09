@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-
+import bunyan from 'bunyan';
 
 dotenv.config({});
 
@@ -12,7 +12,8 @@ class Config{
     public CLIENT_URL : string | undefined;
     public REDIS_HOST: string | undefined;
 
-    private readonly DEFAULT_DATABASE_URL = 'mongodb://127.0.0.1:27017/chattyapp-backend'
+    private readonly DEFAULT_DATABASE_URL = 'mongodb://127.0.0.1:27017/chattyapp-backend';
+
 
     constructor(){
         this.DATABASE_URL = process.env.DATABASE_URL || this.DEFAULT_DATABASE_URL;
@@ -23,6 +24,10 @@ class Config{
         this.CLIENT_URL = process.env.CLIENT_URL || '';
         this.REDIS_HOST = process.env.REDIS_HOST || '';
 
+    }
+
+    public createLogger(name:string): bunyan {
+        return bunyan.createLogger({name,level:'debug'})
     }
 
     public validateConfig(): void {
