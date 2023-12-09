@@ -28,26 +28,29 @@ export class chattyServer{
     private securityMiddleware(app:Application) : void {
         app.use(
             cookierSession({
-                name:"session",
-                keys:['test1','test2'],
+                name:"session",  //any name you want ( when we setup load balancer we are needing it)
+                keys:['test1','test2'], // later into env variables
                 maxAge : 24*7*60*60*1000,  // 7 days
-                secure : false, 
+                secure : false,  // we want https in production  then we need to set it to true in production server
             })
         )
 
         app.use(hpp());
         app.use(helmet());
         app.use(cors({
-            origin: '*',
-            credentials: true,
-            optionsSuccessStatus:200,
+            origin: '*',  // later we are going to set it to client url
+            credentials: true, // cookies wont work if this is not true
+            optionsSuccessStatus:200, //older browsers like internet expolorers
             methods:['GET','POST','PUT','DELETE','OPTIONS']
         }))
+
+        // now without cors we are not gonna able to make a request from out client to backend .
+        //later we are gonna change origin in cors
     }
 
     private standardMiddleware(app:Application) : void {
         app.use(compression());
-        app.use(json({limit:'50mb'}));
+        app.use(json({limit:'50mb'}));  //exceeds more than 50mb throws an error 
         app.use(urlencoded({extended:true,limit:'50mb'}));
 
 
