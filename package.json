@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/app.ts | ./node_modules/.bin/bunyan",
     "lint:check": "eslint 'src/**/*.ts'",
-    "lint:fix":"eslint 'src/**/*.ts' --fix",
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
     "prettier:check": "prettier --check 'src/**/*.{ts,json}'",
     "prettier:fix": "prettier --write 'src/**/*.{ts,json}'"
   },
@@ -28,7 +28,9 @@
     "mongoose": "^8.0.1",
     "redis": "^4.6.11",
     "socket.io": "^4.7.2",
-    "typescript": "^5.3.2"
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.3.2",
+    "typescript-transform-paths": "^3.4.6"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.11",
