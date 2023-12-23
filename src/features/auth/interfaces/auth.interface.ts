@@ -1,11 +1,11 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'mongodb';
-import { IUserDocument } from '@user/interfaces/user.interface';
+// import { IUserDocument } from '@user/interfaces/user.interface';
 
 declare global {
   namespace Express {
     interface Request {
-      currentUser?: AuthPayload;
+      currentUser?: AuthPayload;   //this is optional because user may not logged in.
     }
   }
 }
@@ -16,11 +16,11 @@ export interface AuthPayload {
   email: string;
   username: string;
   avatarColor: string;
-  iat?: number;
+  iat?: number;  // this is timeout property for the token
 }
 
 export interface IAuthDocument extends Document {
-  _id: string | ObjectId;
+  _id: string | ObjectId;  //when receiving the _id from req it will be in string but from mongo it is objectid.
   uId: string;
   username: string;
   email: string;
@@ -43,5 +43,6 @@ export interface ISignUpData {
 }
 
 export interface IAuthJob {
-  value?: string | IAuthDocument | IUserDocument;
+  value?: string | IAuthDocument ;
+  // | IUserDocument;
 }

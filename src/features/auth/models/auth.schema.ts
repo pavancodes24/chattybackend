@@ -18,14 +18,15 @@ const authSchema: Schema = new Schema(
   {
     toJSON: {
       transform(_doc, ret) {
-        delete ret.password;
+        delete ret.password;   // delete password once retrieved the data.
         return ret;
       }
     }
   }
 );
 
-authSchema.pre('save', async function (this: IAuthDocument, next: () => void) {
+//pre save hook does it all
+authSchema.pre('save', async function (this: IAuthDocument, next: () => void) {   // before saving the entered password in database to hash it we use this method.
   const hashedPassword: string = await hash(this.password as string, SALT_ROUND);
   this.password = hashedPassword;
   next();
