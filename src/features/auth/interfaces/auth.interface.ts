@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 declare global {
   namespace Express {
     interface Request {
-      currentUser?: AuthPayload;   //this is optional because user may not logged in.
+      currentUser?: AuthPayload; //this is optional because user may not logged in.
     }
   }
 }
@@ -16,11 +16,11 @@ export interface AuthPayload {
   email: string;
   username: string;
   avatarColor: string;
-  iat?: number;  // this is timeout property for the token
+  iat?: number; // this is timeout property for the token
 }
 
 export interface IAuthDocument extends Document {
-  _id: string | ObjectId;  //when receiving the _id from req it will be in string but from mongo it is objectid.
+  _id: string | ObjectId; //when receiving the _id from req it will be in string but from mongo it is objectid.
   uId: string;
   username: string;
   email: string;
@@ -43,6 +43,6 @@ export interface ISignUpData {
 }
 
 export interface IAuthJob {
-  value?: string | IAuthDocument ;
+  value?: string | IAuthDocument;
   // | IUserDocument;
 }
