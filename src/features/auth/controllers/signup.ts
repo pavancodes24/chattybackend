@@ -7,6 +7,8 @@ import { authService } from '@service/db/auth.service';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { Helpers } from '@global/helpers/helper';
 import { UploadApiResponse } from 'cloudinary';
+import HTTP_STATUS from 'http-status-codes';
+
 import { uploads } from '@global/helpers/cloudinary-upload';
 
 
@@ -32,11 +34,13 @@ export class SignUp {
       avatarColor
     });
 
-    const result: UploadApiResponse = await uploads(avatarImage,`${userObjectId}`,true,true);
+    const result: UploadApiResponse = (await uploads(avatarImage,`${userObjectId}`,true,true)) as UploadApiResponse;
     // `${userObjectId}`,true,true -> if these properties are not added cloudinary will generate its own id. will be problem if we want to change its image data.
-    if(result?.public_id) {
+    if(!result?.public_id) {
       throw new BadRequestError('File upload : Error occurred. Try again.');
     }
+
+    res.status(HTTP_STATUS.CREATED).json({message:'User created successfully',authData});
   }
 
   private signUpData(data:ISignUpData): IAuthDocument {
